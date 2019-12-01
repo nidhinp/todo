@@ -43,6 +43,7 @@ func (server *Server) Run(addr string) {
 	router := gin.Default()
 
 	router.GET("/", controllers.HomeController)
+	router.POST("/login", controllers.Login)
 
 	router.Run(addr)
 }
