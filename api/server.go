@@ -7,10 +7,10 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/nidhinp/todo/api/config"
+	"github.com/nidhinp/todo/api/controllers"
 )
 
-var server = config.Server{}
+var server = controllers.Server{}
 
 // Run the server
 func Run() {

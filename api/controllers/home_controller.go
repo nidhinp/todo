@@ -7,7 +7,7 @@ import (
 )
 
 // HomeController return home response
-func HomeController(c *gin.Context) {
+func (s *Server) HomeController(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"home": "This is home controller",
 	})

@@ -1,30 +1,38 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/nidhinp/todo/api/models"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
 )
 
-// Login endpoint to user login
-func Login(c *gin.Context) {
-	c.Header("Content-Type", "application/json; charset=utf-8")
+// Login struct
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
-	login := models.User{}
+// Validate the login struct
+func (login Login) Validate() error {
+	return validation.ValidateStruct(&login,
+		validation.Field(&login.Email, validation.Required, is.Email),
+		validation.Field(&login.Password, validation.Required),
+	)
+}
+
+// Login endpoint to user login
+func (s *Server) Login(c *gin.Context) {
+	var login Login
 	c.BindJSON(&login)
-	validationErr := login.Validate("login")
-	if validationErr != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": validationErr,
-		})
+
+	err := login.Validate()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-
-	fmt.Println(login.Email)
-	fmt.Println(login.Password)
 
 	c.JSON(http.StatusOK, gin.H{
 		"login": true,
